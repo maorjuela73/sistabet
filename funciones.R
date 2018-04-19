@@ -23,17 +23,17 @@ notas
 # Recibe una tibble de notas y entrega la misma filtrada por variables entregadas como parámetro
 # Input: inotas: base de datos de notas, icurso: curso a filtrar, isemestre: semestre a filtrar, ivar: variable a filtrar (outcome o nota_final)
 # output: tibble de una sola columna con los datos filtrados. NA en caso de no encontrar datos
-retriever <- function(inotas, iarea , icurso, isemestre, ivar){
+retriever <- function(inotas, iarea = "Total", icurso = "Total", isemestre = "Total", ivar){
   notasfiltradas <- inotas 
-  if(!missing(iarea))
+  if(iarea != "Total")
   {
     notasfiltradas <- notasfiltradas %>% filter(area == iarea)
   }
-  if(!missing(icurso))
+  if(icurso != "Total")
   {
     notasfiltradas <- notasfiltradas %>% filter(curso == icurso)
   }
-  if(!missing(isemestre))
+  if(isemestre != "Total")
   {
     notasfiltradas <- notasfiltradas %>% filter(semestre == isemestre)
   }  
