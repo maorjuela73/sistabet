@@ -15,6 +15,7 @@ library(dplyr)
 library(ggplot2)
 library(ggthemes)
 library(plotly)
+library(aws.s3)
 
 #Lectura de bases de datos de usuarios y cursos
 profesores <- read_xlsx("www/input/Usuarios y Cursos.xlsx", sheet = "Informacion profesores" ) 
@@ -290,6 +291,32 @@ ui <- ui <- dashboardPage(
       tabItem(tabName = "encuestas_egresados",
             imageOutput("imagenEncuestasEg", height = 300)
       ),
+    # GMC -------------------------------------------------------------------------------------  
+      tabItem(tabName = "actas",
+              fluidPage(
+                fluidRow(
+                  column(width = 7,
+                         box(width = 12,
+                             h1("Archivos cargados")
+                         )
+                  ),
+                  column(width = 5,
+                         box(width = 12, 
+                             background = "light-blue", 
+                             h2("Carga un archivo"),
+                             fileInput("file1", "Escoja archivo a cargar",
+                                       multiple = TRUE,
+                                       accept = c(".pdf",
+                                                  ".doc",
+                                                  ".docx",
+                                                  ".xls",
+                                                  ".xlsx"))
+                             )
+                         )
+                )
+              )
+      ),
+    
     tabItem(tabName = "ayuda",
             h2("Ayuda"),
             fluidRow(
