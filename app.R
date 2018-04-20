@@ -15,7 +15,8 @@ library(dplyr)
 library(ggplot2)
 library(ggthemes)
 library(plotly)
-library(aws.s3)
+# Este o el de dropbox
+# library(aws.s3)
 
 #Lectura de bases de datos de usuarios y cursos
 profesores <- read_xlsx("www/input/Usuarios y Cursos.xlsx", sheet = "Informacion profesores" ) 
@@ -30,29 +31,27 @@ cursos_gestorg <- filter(cursos, Área == 'Gestión de Organizaciones')
 cursos_ecofin <- filter(cursos, Área == 'Economía y Finanzas')
 
 #Lectura de bases de datos de notas para indicadores
-notas <- read_xlsx("www/input/data.xlsx",
-                "clean",
-                col_types = c("numeric", 
-                              "numeric",
-                              "text",
-                              "text",
-                              "numeric",
-                              "numeric",
-                              "numeric",
-                              "numeric",
-                              "numeric",
-                              "numeric",
-                              "numeric",
-                              "numeric",
-                              "numeric",
-                              "numeric",
-                              "numeric",
-                              "numeric"
-                              )
-)
+notas <- read_xlsx(path = "www/input/data.xlsx",
+                   col_types = c("text",
+                                 "text",
+                                 "text",
+                                 "text",
+                                 "text",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric",
+                                 "numeric"))
 
 # Estadísticos-------------------------------------------------------------------
-lista <- notas %>% filter(semestre == "201610" & curso == "IIND2401" & nombre_curso == "Adec") %>% select(K) %>% unlist()
+lista <- notas %>% filter(semestre == "201610" & curso == "IIND2401") %>% select(K) %>% unlist()
 descriptivos <- function(lista){
   datos <- lista %>% na.omit()
   resumen <- summary(datos) %>% unlist()

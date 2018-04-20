@@ -42,20 +42,30 @@ retriever <- function(inotas, iarea = "Total", icurso = "Total", isemestre = "To
   return(notasfiltradas)
 }
 
-prueba <- retriever(inotas = notas, isemestre = "201710", ivar = "H")
+prueba <- retriever(inotas = notas, isemestre = "201710", icurso = "IIND2202", ivar = "nota_final")
 
-ggplot(prueba, aes(x = calificacion)) + 
-  geom_histogram(aes(y=..density..), bins = ceiling(sqrt(length(datos)))) + 
-  geom_density(size= 1.0, colour = "red", alpha = 1) + 
-  scale_y_continuous(name = "Densidad", limits = c(0, 1), sec.axis = sec_axis(~.*nrow(datosplot), name = "Cantidad de observaciones", breaks = c(seq(0,nrow(datosplot),by = 100),nrow(datosplot)))) +
-  xlab("Calificaciones")+
-  theme_minimal()
+# ggplot(prueba, aes(x = calificacion)) + 
+#   geom_histogram(aes(y=..density..), bins = ceiling(sqrt(length(datos)))) + 
+#   geom_density(size= 1.0, colour = "red", alpha = 1) + 
+#   scale_y_continuous(name = "Densidad", limits = c(0, 1), sec.axis = sec_axis(~.*nrow(datosplot), name = "Cantidad de observaciones", breaks = c(seq(0,nrow(datosplot),by = 100),nrow(datosplot)))) +
+#   xlab("Calificaciones")+
+#   theme_minimal()
 
-ggplot(prueba, aes(x = calificacion)) +
+plotter <- function(icalificacion){
+  return (ggplot(prueba, aes(x = calificacion)) +
   geom_histogram(aes(y = ..density..), bins = ceiling(2*(nrow(prueba)^(1/3)))) +
   geom_density(size= 1.0, colour = "red") +
   scale_y_continuous(limits = c(0, 2), labels=scales::percent) +
-  scale_x_continuous(limits = c(0, 5))
+  scale_x_continuous(limits = c(0, 5)) +
+  theme_minimal()) 
+}
+
+notas %>% 
+  retriever(isemestre = "201710", icurso = "IIND2202", ivar = "nota_final") %>% 
+  plotter()
+
+
+
 
 plot <- ggplot(prueba, aes(x = calificacion)) +
   geom_histogram(aes(y = ..count..), bins = ceiling(2*(nrow(prueba)^(1/3))))
@@ -75,7 +85,7 @@ plot <- ggplot(prueba, aes(x = calificacion)) +
   geom_histogram(aes(y = ..count..), bins = ceiling(2*(nrow(prueba)^(1/3))))
 
 plot <- ggplot(notas, aes(x = A)) +
-  geom_histogram(aes(y = ..density..), bins = ceiling(2*(nrow(prueba)^(1/3))))+
+  geom_histogram(aes(y = ..density..), bins = ceiling(2*(nrow(prueba)^(1/3)))) +
   geom_density(size= 1.0, colour = "red") 
 
 plot
@@ -83,6 +93,10 @@ plot
 summary(prueba)
 var(prueba$calificacion)
 sd(prueba$calificacion)  
+cut(prueba$calificacion, breaks = ceiling(sqrt(nrow(prueba)))) %>% 
+  table()
+cut(prueba$calificacion, breaks = ceiling(2*(nrow(prueba)^(1/3)))) %>% 
+  table() %>% names()
 
 ggplot(notas, aes(x = A)) +
   geom_histogram(aes(y = ..density..)) +
